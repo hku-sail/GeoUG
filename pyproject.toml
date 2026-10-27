@@ -8,7 +8,7 @@ version = "0.1.0"
 description = "Geometry generation and spatial understanding research code"
 readme = "README.md"
 requires-python = ">=3.10,<3.12"
-license = {text = "Mixed licensing; see THIRD_PARTY_NOTICES.md"}
+license = {text = "Mixed licensing; see individual source headers and licenses/"}
 authors = [{name = "GeoUG Authors"}]
 keywords = ["multimodal", "spatial-reasoning", "depth-estimation"]
 classifiers = [
@@ -31,9 +31,6 @@ dev = [
 [tool.setuptools]
 include-package-data = true
 license-files = [
-    "LICENSE",
-    "NOTICE",
-    "THIRD_PARTY_NOTICES.md",
     "licenses/*.txt",
 ]
 

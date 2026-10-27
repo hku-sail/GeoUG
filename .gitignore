@@ -4,3 +4,8 @@ AGENTS.md
 /third_party/
 /release_tests/
 /.github/workflows/
+/CITATION.cff
+/CONTRIBUTING.md
+/LICENSE
+/NOTICE
+/SECURITY.md
