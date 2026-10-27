@@ -1,0 +1,12 @@
+{
+  "example_metric_depth": {
+    "path": "/path/to/depth_benchmark",
+    "split": ".index.txt",
+    "width": 640,
+    "height": 480,
+    "depth_unit": 1.0,
+    "drop_max_depth": 1000.0,
+    "subset": null,
+    "eigen_valid_mask": false
+  }
+}

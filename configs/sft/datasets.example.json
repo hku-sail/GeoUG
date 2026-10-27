@@ -1,0 +1,46 @@
+{
+  "vlm_llavaov_sft_3238006_bagel": {
+    "dataset_type": "vlm_parquet",
+    "datasets": {
+      "llavaov_sft_3238006_bagel": {
+        "data_dir": "/path/to/llavaov_sft_3238006_bagel",
+        "num_files": 6476,
+        "num_total_samples": 3238002,
+        "parquet_info_path": "/path/to/metadata/llavaov_sft_3238006_bagel.json"
+      }
+    }
+  },
+  "depth_metric_taskonomy_refined": {
+    "dataset_type": "metric_depth",
+    "datasets": {
+      "taskonomy_refined": {
+        "data_dir": "/path/to/taskonomy_refined",
+        "num_files": 15377,
+        "num_total_samples": 4613199,
+        "parquet_info_path": "/path/to/metadata/taskonomy_refined.json"
+      }
+    }
+  },
+  "interleave_reasoning_v6_moge3_coco": {
+    "dataset_type": "reasoning_v6",
+    "datasets": {
+      "interleave_reasoning_v6_moge3_coco": {
+        "data_dir": "/path/to/interleave_reasoning_v6_moge3_coco",
+        "num_files": 1,
+        "num_total_samples": 167096,
+        "parquet_info_path": "/path/to/metadata/interleave_reasoning_v6_moge3_coco.json"
+      }
+    }
+  },
+  "interleave_reasoning_v6_moge3_ade20k": {
+    "dataset_type": "reasoning_v6",
+    "datasets": {
+      "interleave_reasoning_v6_moge3_ade20k": {
+        "data_dir": "/path/to/interleave_reasoning_v6_moge3_ade20k",
+        "num_files": 1,
+        "num_total_samples": 145240,
+        "parquet_info_path": "/path/to/metadata/interleave_reasoning_v6_moge3_ade20k.json"
+      }
+    }
+  }
+}
