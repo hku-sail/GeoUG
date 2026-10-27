@@ -2,3 +2,5 @@
 .readme-sync/
 AGENTS.md
 /third_party/
+/release_tests/
+/.github/workflows/
