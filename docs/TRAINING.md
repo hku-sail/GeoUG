@@ -5,8 +5,8 @@
 This guide brings together the training data releases, environment setup, and
 SFT / RL launch instructions. Run all commands from the **GeoUG checkout root**.
 The public starting point for spatial-policy RL is
-[GeoUG-ColdStart](https://huggingface.co/rayruiyang/GeoUG-ColdStart), the v6 SFT
-step-1500 checkpoint.
+[GeoUG-ColdStart](https://huggingface.co/rayruiyang/GeoUG-ColdStart), the supervised
+cold-start checkpoint.
 
 ## Training data card
 
@@ -67,7 +67,7 @@ from huggingface_hub import hf_hub_download, snapshot_download
 
 snapshot_download(
     repo_id="rayruiyang/GeoUG-ColdStart",
-    revision="33895b5d05a4dafa9e05fc73d01ef2cf326ed9bd",
+    revision="bc482a34918e9fe3801ad59384609e772bcb0f2d",
     local_dir="ckpt/geoug-coldstart",
 )
 hf_hub_download(
@@ -129,7 +129,7 @@ bash scripts/train_sft.sh \
   --freeze_vit True
 ```
 
-The public model release starts at GeoUG-ColdStart (v6 SFT step 1500).
+The public model release starts at GeoUG-ColdStart.
 Reproducing the earlier SFT stage requires the original v5 initialization and
 training inputs, which are not included in these model packages. Use
 GeoUG-ColdStart to initialize the released RL recipe.

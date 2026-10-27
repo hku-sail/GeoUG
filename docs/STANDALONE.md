@@ -4,7 +4,8 @@ The `geoug` directory is the repository root. Copy or clone it into any director
 no parent workspace, private Python package, or external source symlink is needed.
 Use Linux, Python 3.10 or 3.11, and a CUDA GPU for model inference/training.
 Model weights and datasets remain separate artifacts, supplied through explicit
-local paths. Their public upload status is tracked in the [README release status](../README.md#release-status).
+local paths. Their public upload status is tracked in the
+[README](../README.md#release-status).
 
 ## Inference and SFT environment
 
@@ -54,34 +55,21 @@ and depth-evaluation launchers behave the same way. `PYTHON` selects the interpr
 
 ## RL and VLMEvalKit
 
-Use separate environments following the README's RL and evaluation installation
-commands. Do not install the SFT package dependencies into the RL environment:
+Use separate environments following [the training guide](TRAINING.md) and
+the evaluation installation commands in the [README](../README.md). Do not install the SFT package dependencies into the RL environment:
 its Transformers and Arrow versions differ. The RL launcher sets the source
 import path itself and uses the bundled training engine and geometry tools.
 Explicit model/data/cache inputs are listed in `docs/RL_TRAINING.md`.
 
-## CPU release and relocation checks
+## Verify the installation
+
+From the repository root, check the available CLI options:
 
 ```bash
-python -m pip install -r requirements-dev.txt
-bash scripts/check_release.sh
-python scripts/check_standalone.py
+python -m inference.depth --help
+python -m inference.spatial --help
+python -m evaluation.depth.eval_depth --help
 ```
 
-The relocation check creates a temporary copy of the source without weights,
-datasets, outputs, virtual environments, or Git metadata. It clears `PYTHONPATH`,
-runs the release tests from that copy, and checks all three inference/evaluation
-CLI help commands. CI runs this check on Python 3.10 and 3.11.
-To retain a checked copy, pass a new directory outside the checkout:
-
-```bash
-python scripts/check_standalone.py --destination /tmp/geoug-source-check
-```
-
-`scripts/check_portability.py` rejects broken symlinks and links pointing outside
-the source tree. Regression tests cover model/config selection, final-answer
-parsing, RL package selection, and launcher working-directory behavior.
-
-These CPU checks do not prove model quality or training convergence. Before a
-public release, run real GPU inference and the benchmark using published, fixed
-model/data revisions; the legacy paper scores are not current-protocol validation.
+These commands check CLI availability without loading model weights. Run inference
+with a downloaded model and an input image to verify the GPU environment.

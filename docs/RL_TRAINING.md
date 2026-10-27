@@ -1,13 +1,15 @@
 # RL Training
 
-RL training is a required part of the GeoUG release. The final training path is:
+[Training data card and setup](TRAINING.md)
+
+The public RL recipe starts from GeoUG-ColdStart and produces the adaptive
+spatial reasoning policy:
 
 ```text
-v5 checkpoint at step 1000
-  -> interleave-reasoning v6 SFT
-  -> select SFT checkpoint at step 1500
-  -> spatial_gate_draft_v3 RL
-  -> merge the LoRA adapter into the SFT checkpoint
+GeoUG-ColdStart
+  -> spatial-policy RL
+  -> merge the LoRA adapter into the initialization
+  -> GeoUG-Spatial
 ```
 
 ## Method
@@ -57,11 +59,30 @@ The public RL package is under `train/rl/`:
 
 `train/rl/data_pipeline/` contains portable data conversion and sampling tools.
 Depth-cache generation used the paper training infrastructure and is not part
-of the first public release; download the published cache artifact once it is
-available. Offline probes and experiment scheduling scripts are intentionally
+of the public runtime; the generated training caches are embedded in
+[train_geoug_rl.parquet](https://huggingface.co/datasets/rayruiyang/GeoUG_data/blob/main/train_geoug_rl.parquet). Offline probes and experiment scheduling scripts are intentionally
 not part of the runtime package.
 
 ## Required dataset layout
+
+The public training download is a **single parquet** with 800 training rows.
+It preserves the original question and image columns and adds `camera`
+(`intrinsics`, `image_wh`) and `depth_npy` (the original NumPy file bytes).
+Read a depth array with `np.load(io.BytesIO(row["depth_npy"]), allow_pickle=False)`.
+No separate camera file or depth-cache download is needed.
+
+To restore the directory layout used by the training runtime:
+
+```bash
+python scripts/pack_data_parquet.py unpack-rl \
+  --input /path/to/geoug-spatial-rl/train_geoug_rl.parquet \
+  --output /path/to/rl_train
+```
+
+Set `RL_DATASET=/path/to/rl_train` and
+`DEPTH_CACHE_DIR=/path/to/rl_train/depth-cache`. This restores only the public
+training split. Prepare your own validation/evaluation data for training;
+the internal evaluation subset is not included in the release.
 
 `RL_DATASET` points to:
 
@@ -96,7 +117,8 @@ image_key
 
 The actual values must come from the source dataset. Missing intrinsics are treated as an error rather than silently replaced with an approximation.
 
-The depth cache directory must contain the generated depth representation expected by `spatial_inferencer.py`. Its manifest and checksums will be published with the RL data artifact, not committed to git.
+The unpacked depth cache directory contains the generated depth representation
+expected by `spatial_inferencer.py`.
 
 ## Bundled training engine
 
@@ -121,7 +143,7 @@ development override.
 The public launcher uses environment variables rather than cluster-specific paths:
 
 ```bash
-MODEL_PATH=/path/to/v6-sft-1500 \
+MODEL_PATH=/path/to/geoug-coldstart \
 RL_DATASET=/path/to/rl_train \
 DEPTH_CACHE_DIR=/path/to/depth_cache \
 EVAL_QUESTIONS=/path/to/d3-eval.parquet \
@@ -140,6 +162,6 @@ MASTER_ADDR
 MASTER_PORT
 ```
 
-The paper recipe used 16 GPUs. Model initialization, portable training data,
-camera metadata, and depth-cache manifests are required separately; see the
-[release status](../README.md#release-status) for availability.
+The paper recipe used 16 GPUs. Model initialization and the public RL training
+parquet are described in the [training guide](TRAINING.md). Validation/evaluation
+data must be prepared separately.

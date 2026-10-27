@@ -1,5 +1,7 @@
 # SFT training
 
+[Training data card and setup](../../docs/TRAINING.md)
+
 The supported Python entry point is:
 
 ```bash

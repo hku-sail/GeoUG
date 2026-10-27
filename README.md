@@ -75,7 +75,7 @@ Third-person → first-person generation.
 [▶ Watch demo](https://yangr116.github.io/geoug-project-page/assets/video/gen-exo-ego.mp4)
 
 These research demos use GeoUG task configurations; they do not imply that all
-capabilities are available in each planned inference checkpoint. Video transitions
+capabilities are available in each released inference checkpoint. Video transitions
 are presentation effects, not denoising trajectories.
 
 <details>
@@ -96,14 +96,14 @@ GeoUG cold start **data** is coming soon; the ColdStart **model** is already ava
 
 ## Model Card
 
-The model release includes two inference models and one SFT checkpoint
-for initializing spatial-policy RL training.
+GeoUG provides an adaptive spatial reasoning model, a metric-depth model,
+and a cold-start checkpoint for RL training.
 
 | Model | Download | Notes / capabilities | Documentation |
 |---|---|---|---|
-| **GeoUG-Spatial** | [Hugging Face][model-spatial-rl] | Adaptive spatial reasoning: draft an answer, optionally generate metric depth, call geometry tools, and revise the answer. Final merged EMA policy (λ=0.1). | [Inference guide](inference/README.md) |
-| **GeoUG-Depth** | [Hugging Face][model-metric-depth] | Standalone metric-depth generation with MMDC; outputs depth in meters for measurement and 3D reconstruction. | [Inference guide](inference/README.md) |
-| **GeoUG-ColdStart** | [Hugging Face][model-sft-init] | v6 SFT step 1500; initialization for spatial-policy RL training. | [RL recipe](docs/RL_TRAINING.md) |
+| **GeoUG-Spatial** | [Hugging Face][model-spatial-rl] | Adaptive spatial reasoning with depth generation and geometry tools; decides when geometric evidence is needed to answer a question. | [Inference guide](inference/README.md) |
+| **GeoUG-Depth** | [Hugging Face][model-metric-depth] | Generates metric depth in meters from a single image for geometric measurement and 3D reconstruction. | [Inference guide](inference/README.md) |
+| **GeoUG-ColdStart** | [Hugging Face][model-sft-init] | Cold-start checkpoint for initializing spatial-policy RL training. | [Training guide](docs/TRAINING.md) |
 
 **Local use.** Place the two inference packages in
 `ckpt/geoug-spatial-rl-lambda0.1/` and `ckpt/geoug-metric-depth/`, respectively,
@@ -126,10 +126,10 @@ ordinary/circular scoring protocol fixed when comparing models.
 | Dataset | Format / task | Download | Notes / protocol |
 |---|---|---|---|
 | **3DCueBench** | Image-embedded parquet; depth ordering and 3D-distance ordering | [Hugging Face][data-3dcuebench] | One self-contained parquet: 800 questions on 757 images; 400 depth + 400 distance questions, four difficulty bins, balanced A/B answers. [Data card and validation](benchmarks/3dcuebench/README.md). |
-| **DA-2K Textual** | Single image-embedded parquet; relative depth with textual point coordinates | [Reproduce locally][data-da2k-textual] | 2,068 questions. Set `DA2K_TEXTUAL_PARQUET`; model-specific coordinate rendering and circular evaluation are supported. [Evaluation guide](evaluation/vlmevalkit/README.md). |
-| **DA-2K Visual** | TSV; relative depth with colored point markers | [Reproduce locally][data-da2k-visual] | Set `DA2K_DATASET_PATH`; circular evaluation uses a separate marker-swapped TSV via `DA2K_CIRCULAR_DATASET_PATH`. [Evaluation guide](evaluation/vlmevalkit/README.md). |
-| **CV-Bench-3D Textual** | TSV; depth and 3D-distance questions with textual boxes | [Hugging Face][data-cvbench-textual] | Download `CVBench3DTexutal.tsv` and set `CVBENCH_3D_TEXTUAL_PATH`. Includes the circular paper-suite protocol. [Evaluation guide](evaluation/vlmevalkit/README.md). |
-| **CV-Bench-3D Visual** | Images with visual annotations; depth and 3D-distance questions | [Via VLMEvalKit](evaluation/vlmevalkit/README.md#bagel-base-model-on-cv-bench-3d) | The bundled evaluator downloads the upstream visual split; no separate GeoUG download is needed. |
+| **DA-2K Textual** | Single image-embedded parquet; relative depth with textual point coordinates | [Reproduce locally][data-da2k-textual] | 2,068 relative-depth questions with textual point coordinates; supports model-specific coordinate formats and circular evaluation. [Evaluation guide](evaluation/vlmevalkit/README.md). |
+| **DA-2K Visual** | TSV; relative depth with colored point markers | [Reproduce locally][data-da2k-visual] | Relative-depth questions with colored point markers; circular evaluation swaps the marker colors between the two points. [Evaluation guide](evaluation/vlmevalkit/README.md). |
+| **CV-Bench-3D Textual** | TSV; depth and 3D-distance questions with textual boxes | [Hugging Face][data-cvbench-textual] | 1,200 questions: 600 depth + 600 distance, with textual bounding boxes. Supports circular evaluation. [Evaluation guide](evaluation/vlmevalkit/README.md). |
+| **CV-Bench-3D Visual** | Images with visual annotations; depth and 3D-distance questions | [Via VLMEvalKit](evaluation/vlmevalkit/README.md#bagel-base-model-on-cv-bench-3d) | The evaluator downloads the upstream visual split automatically. |
 | **Metric-depth evaluation suite** | NYU-v2, KITTI, ETH3D, and other configured benchmarks | [Dataset setup](evaluation/depth/README.md) | Obtain the source datasets separately and configure their local paths. [Config template](configs/eval/depth_datasets.example.json). |
 
 ## Main results
@@ -140,10 +140,8 @@ Circular accuracy requires both answer-option orders to be correct.
 |---|---:|---:|---:|---:|
 | GeoUG (RL policy, λ=0.1) | **97.9** | **90.8** | **94.2** | **94.3** |
 
-These are **legacy-paper protocol** results. The current dataset-owned prompt
-router has only been rerun for the text-only endpoint; an adaptive-policy
-rerun is still required before claiming reproduction with the current code.
-The table reports paper results, not a verified reproduction using the current release.
+These results are reported in the paper. Full adaptive-policy reproduction
+with the current evaluation code remains pending.
 
 The standalone GeoUG-Depth model obtains affine-aligned AbsRel / δ1 of
 3.32 / 98.46 on NYU-v2, 4.84 / 97.27 on KITTI, and 3.75 / 97.85 on ETH3D.
