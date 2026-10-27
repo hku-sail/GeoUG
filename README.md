@@ -1,9 +1,4 @@
-<h1 align="center">GeoUG</h1>
-<h3 align="center">Learning and Reasoning with Geometry:<br>How Generation Helps Spatial Understanding?</h3>
-
-<p align="center">
-  Rui Yang · Yanwei Li · Sili Chen · Jingjia Huang · Yi Lin · Hengshuang Zhao
-</p>
+<h1 align="center">GeoUG: Learning and Reasoning with Geometry — How Generation Helps Spatial Understanding?</h1>
 
 <p align="center">
   <a href="https://yangr116.github.io/geoug-project-page/"><img src="https://img.shields.io/badge/Project-Page-2563eb" alt="Project Page"></a>
@@ -18,19 +13,10 @@
 </p>
 
 <p align="center">
-  <a href="https://yangr116.github.io/geoug-project-page/#reasoning">
-    <img src="docs/assets/reasoning.gif" alt="GeoUG revises blue light to folding chair after generated depth gives head-to-chair distance 3.82 m and head-to-light distance 6.85 m" width="100%">
+  <a href="https://yangr116.github.io/geoug-project-page/assets/video/geoug-direct-fusion-hd.mp4">
+    <img src="docs/assets/teaser.gif" alt="GeoUG project-page teaser: depth generation, 3D measurement and answer revision, generated first-person view, and illustrative two-view fusion" width="100%">
   </a>
 </p>
-<p align="center">
-  <b>From a plausible guess to a geometry-grounded answer.</b><br>
-  GeoUG drafts an answer, decides whether geometry is needed, then generates depth and measures 3D distances.<br>
-  <a href="https://yangr116.github.io/geoug-project-page/assets/video/reasoning.mp4">▶ Watch the reasoning demo</a>
-</p>
-
-The distances above are recorded model/tool outputs, not ground-truth measurements.
-Depth is generated selectively; the policy can also retain its draft without generation.
-
 <p align="center">
   <a href="#highlights">Highlights</a> ·
   <a href="#see-geoug-in-action">Demos</a> ·
