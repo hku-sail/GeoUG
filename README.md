@@ -89,30 +89,30 @@ Explore [answer corrections, direct answers, and failure cases](https://yangr116
 
 ## Release status
 
-Public model weights and GeoUG data packages are **coming soon**. Download links
-will be added here as versioned artifacts become available. The usage guides below
-describe the planned code release; model weights and datasets are separate downloads.
+**Available now:** GeoUG-Spatial, GeoUG-Depth, GeoUG-ColdStart, 3DCueBench,
+CV-Bench-3D Textual, and GeoUG Spatial RL training data. Download links are in
+the model and data cards below. DA-2K Textual / Visual can be reproduced locally.
+GeoUG cold start **data** is coming soon; the ColdStart **model** is already available.
 
 ## Model Card
 
-The planned model release includes two inference models and one SFT checkpoint
+The model release includes two inference models and one SFT checkpoint
 for initializing spatial-policy RL training.
 
 | Model | Download | Notes / capabilities | Documentation |
 |---|---|---|---|
-| **GeoUG Spatial RL (λ=0.1)** | [Coming soon][model-spatial-rl] | Adaptive spatial reasoning: draft an answer, optionally generate metric depth, call geometry tools, and revise the answer. Final merged EMA policy. | [Inference guide](inference/README.md) |
-| **GeoUG Metric Depth** | [Coming soon][model-metric-depth] | Standalone metric-depth generation with MMDC; outputs depth in meters for measurement and 3D reconstruction. | [Inference guide](inference/README.md) |
-| **GeoUG v6 · SFT step 1500** | [Coming soon][model-sft-init] | SFT initialization for spatial-policy RL training. | [RL recipe](docs/RL_TRAINING.md) |
+| **GeoUG-Spatial** | [Hugging Face][model-spatial-rl] | Adaptive spatial reasoning: draft an answer, optionally generate metric depth, call geometry tools, and revise the answer. Final merged EMA policy (λ=0.1). | [Inference guide](inference/README.md) |
+| **GeoUG-Depth** | [Hugging Face][model-metric-depth] | Standalone metric-depth generation with MMDC; outputs depth in meters for measurement and 3D reconstruction. | [Inference guide](inference/README.md) |
+| **GeoUG-ColdStart** | [Hugging Face][model-sft-init] | v6 SFT step 1500; initialization for spatial-policy RL training. | [RL recipe](docs/RL_TRAINING.md) |
 
 **Local use.** Place the two inference packages in
 `ckpt/geoug-spatial-rl-lambda0.1/` and `ckpt/geoug-metric-depth/`, respectively,
 or pass `--model-path /path/to/model`. Each package contains model configs,
 tokenizer files, `transform_config.yaml`, `ae.safetensors`, `ema.safetensors`,
-and SHA256 checksums. Public package download links will be added above.
+and SHA256 checksums. Download the complete package from the model links above.
 
-**Download placeholders.** All **Coming soon** links in the model and data
-tables currently point to the release status above. They will be replaced with
-versioned Hugging Face download URLs as each artifact is published.
+**Download availability.** The three model packages are available on Hugging Face.
+See the [training data card](docs/TRAINING.md#training-data-card) for training-data availability.
 
 
 ## Data Card
@@ -125,24 +125,12 @@ ordinary/circular scoring protocol fixed when comparing models.
 
 | Dataset | Format / task | Download | Notes / protocol |
 |---|---|---|---|
-| **3DCueBench** | Image-embedded parquet; depth ordering and 3D-distance ordering | [Coming soon][data-3dcuebench] | 800 questions on 757 images; 400 depth + 400 distance questions, four difficulty bins, balanced A/B answers. [Data card and validation](benchmarks/3dcuebench/README.md). |
-| **DA-2K Textual** | Parquet; relative depth with textual point coordinates | [Coming soon][data-da2k-textual] | Set `DA2K_TEXTUAL_PARQUET`; model-specific coordinate rendering and circular evaluation are supported. [Evaluation guide](evaluation/vlmevalkit/README.md). |
-| **DA-2K Visual** | TSV; relative depth with colored point markers | [Coming soon][data-da2k-visual] | Set `DA2K_DATASET_PATH`; circular evaluation uses a separate marker-swapped TSV via `DA2K_CIRCULAR_DATASET_PATH`. [Evaluation guide](evaluation/vlmevalkit/README.md). |
-| **CV-Bench-3D Textual** | TSV; depth and 3D-distance questions with textual boxes | [Coming soon][data-cvbench-textual] | Set `CVBENCH_3D_TEXTUAL_PATH`. Includes the circular paper-suite protocol. [Evaluation guide](evaluation/vlmevalkit/README.md). |
+| **3DCueBench** | Image-embedded parquet; depth ordering and 3D-distance ordering | [Hugging Face][data-3dcuebench] | One self-contained parquet: 800 questions on 757 images; 400 depth + 400 distance questions, four difficulty bins, balanced A/B answers. [Data card and validation](benchmarks/3dcuebench/README.md). |
+| **DA-2K Textual** | Single image-embedded parquet; relative depth with textual point coordinates | [Reproduce locally][data-da2k-textual] | 2,068 questions. Set `DA2K_TEXTUAL_PARQUET`; model-specific coordinate rendering and circular evaluation are supported. [Evaluation guide](evaluation/vlmevalkit/README.md). |
+| **DA-2K Visual** | TSV; relative depth with colored point markers | [Reproduce locally][data-da2k-visual] | Set `DA2K_DATASET_PATH`; circular evaluation uses a separate marker-swapped TSV via `DA2K_CIRCULAR_DATASET_PATH`. [Evaluation guide](evaluation/vlmevalkit/README.md). |
+| **CV-Bench-3D Textual** | TSV; depth and 3D-distance questions with textual boxes | [Hugging Face][data-cvbench-textual] | Download `CVBench3DTexutal.tsv` and set `CVBENCH_3D_TEXTUAL_PATH`. Includes the circular paper-suite protocol. [Evaluation guide](evaluation/vlmevalkit/README.md). |
 | **CV-Bench-3D Visual** | Images with visual annotations; depth and 3D-distance questions | [Via VLMEvalKit](evaluation/vlmevalkit/README.md#bagel-base-model-on-cv-bench-3d) | The bundled evaluator downloads the upstream visual split; no separate GeoUG download is needed. |
 | **Metric-depth evaluation suite** | NYU-v2, KITTI, ETH3D, and other configured benchmarks | [Dataset setup](evaluation/depth/README.md) | Obtain the source datasets separately and configure their local paths. [Config template](configs/eval/depth_datasets.example.json). |
-
-### Training datasets and supporting artifacts
-
-| Dataset / artifact | Stage | Download | Notes / contents |
-|---|---|---|---|
-| **GeoUG cold start data** | SFT | [Coming soon][data-cold-start] | COCO- and ADE20K-derived interleaved spatial reasoning samples. [Manifest format](configs/sft/datasets.example.json). |
-| **GeoUG Spatial RL data** | RL | [Coming soon][data-rl] | Spatial-policy training data, camera metadata, and generated-depth caches packaged together, with manifests and checksums. [RL guide](docs/RL_TRAINING.md). |
-
-Dataset repositories will provide the final revisions, schemas, preparation
-instructions, and applicable source-dataset terms when published. The tables
-above describe the planned release; they do not imply that upstream raw data
-will be redistributed with GeoUG.
 
 ## Main results
 
@@ -182,13 +170,7 @@ and `requirements.txt` share the same dependency list. CUDA/FlashAttention
 must be installed separately as above. See the
 [standalone setup and checks](docs/STANDALONE.md).
 
-```bash
-# RL
-python -m venv .venv-rl
-source .venv-rl/bin/activate
-pip install -r requirements-rl.txt
-pip install flash_attn==2.5.8 --no-build-isolation
-```
+For the separate RL environment, see [training setup](docs/TRAINING.md#environment-setup).
 
 ```bash
 # VLMEvalKit
@@ -264,7 +246,7 @@ disparity-aligned depth metrics. Details are in `evaluation/depth/README.md`.
 
 ### 3DCueBench
 
-Validate a release parquet:
+Download the [released parquet][data-3dcuebench], then validate it:
 
 ```bash
 python benchmarks/3dcuebench/validate.py \
@@ -280,60 +262,14 @@ python benchmarks/3dcuebench/evaluate.py \
   --output outputs/3dcuebench/metrics.json
 ```
 
-The local release candidate contains 800 questions on 757 images and is staged
-for publication as an image-embedded parquet.
+The published release contains 800 questions on 757 images in one image-embedded
+parquet. No separate image directory or metadata download is required. See the
+[download and evaluation guide](benchmarks/3dcuebench/README.md).
 
 ## Training
 
-### SFT
-
-Copy `configs/sft/datasets.example.json`, replace all dataset and parquet-index
-paths, and launch:
-
-```bash
-MODEL_PATH=/path/to/v5-step-1000 \
-GEOUG_DATASET_MANIFEST=/path/to/datasets.json \
-NNODES=2 \
-NPROC_PER_NODE=8 \
-bash scripts/train_sft.sh
-```
-
-`NUM_SHARD` defaults to `NNODES × NPROC_PER_NODE`, so the launcher works for
-both single-node smoke tests and the 16-GPU paper recipe. Full-parameter SFT
-does not fit on 4×A100-80GB with AdamW and EMA; the released recipe was trained
-with 16 GPUs. A memory-bounded 4-GPU smoke test can freeze the large backbones:
-
-```bash
-bash scripts/train_sft.sh \
-  --total_steps 1 \
-  --freeze_llm True \
-  --freeze_vit True
-```
-
-Paper-exact reproduction starts from the v5 step-1000 checkpoint. That
-initialization and the public SFT data manifests must be published separately;
-using either final checkpoint as the initialization is only a wiring test.
-See `train/sft/README.md`.
-
-### RL
-
-RL requires the SFT-1500 initialization, portable train/validation parquets,
-camera metadata, generated-depth caches, and an evaluation subset:
-
-```bash
-MODEL_PATH=/path/to/v6-sft-1500 \
-RL_DATASET=/path/to/rl_train \
-DEPTH_CACHE_DIR=/path/to/train_depth_cache \
-EVAL_QUESTIONS=/path/to/eval_questions.parquet \
-EVAL_DEPTH_CACHE=/path/to/eval_depth_cache \
-LAMBDA_COST=0.1 \
-NPROC_PER_NODE=8 \
-bash scripts/train_rl.sh
-```
-
-The final method is `spatial_gate_draft_v3`: draft tokens receive zero
-advantage, grounding uses depth-branch credit, and the gate uses a forced
-two-branch counterfactual estimate. See `docs/RL_TRAINING.md`.
+See [Training data card and recipes](docs/TRAINING.md) for data downloads,
+environment setup, and SFT / RL training instructions.
 
 ## Repository layout
 
@@ -348,17 +284,15 @@ evaluation/depth/        Metric-depth evaluation
 evaluation/vlmevalkit/   Open-model and circular spatial evaluation
 benchmarks/3dcuebench/   3DCueBench export, validation, and scoring
 third_party/VLMEvalKit/  Fixed evaluation snapshot with GeoUG adapters
-ckpt/                    Local model packages and upload instructions
+ckpt/                    Model download guide (local packages are ignored)
 scripts/                 Public launchers
 ```
 
-<!-- Replace each placeholder independently with the published, versioned download URL. -->
-[model-spatial-rl]: #release-status
-[model-metric-depth]: #release-status
-[model-sft-init]: #release-status
-[data-3dcuebench]: #release-status
-[data-da2k-textual]: #release-status
-[data-da2k-visual]: #release-status
-[data-cvbench-textual]: #release-status
-[data-cold-start]: #release-status
-[data-rl]: #release-status
+<!-- Published repositories and local reproduction guides. -->
+[model-spatial-rl]: https://huggingface.co/rayruiyang/GeoUG-Spatial
+[model-metric-depth]: https://huggingface.co/rayruiyang/GeoUG-Depth
+[model-sft-init]: https://huggingface.co/rayruiyang/GeoUG-ColdStart
+[data-3dcuebench]: https://huggingface.co/datasets/rayruiyang/3DCueBench
+[data-da2k-textual]: evaluation/vlmevalkit/README.md#reproduce-da-2k-textual-and-visual
+[data-da2k-visual]: evaluation/vlmevalkit/README.md#reproduce-da-2k-textual-and-visual
+[data-cvbench-textual]: https://huggingface.co/datasets/rayruiyang/CVBench3DTexutal
