@@ -1,0 +1,111 @@
+# interleave reasoning v6（MoGe-3 深度）：v5 + 决策点前的草答。RL 之前的 SFT 冷启动。
+#
+# 与 interleave_reasoning_v5.yaml 的区别只有两个 cot 数据集（辅助数据、transform、权重都不动）。
+# 公开 manifest 中只包含比较题，分为三种形式：
+#   ① 草答对·直答     门控 token </think> 计 loss
+#   ② 草答对·深度     门控 token 屏蔽，只教深度分支执行
+#   ③ 草答错·深度     门控 token <GENERATE_DEPTH> 计 loss
+# 草答字母在所有行都不计 loss。行内 <|noloss|>...<|/noloss|> 标记由 InterleaveReasoningV6Dataset
+# （data/interleave_datasets/interleave_reasoning_v6_dataset.py）处理，注册见 data/dataset_info.py。
+# 平衡比例：门控标签 深度 : 直答 ≈ 1.16 : 1；共 312,336 行（COCO 167,096 / ADE20K 145,240），3k 步约 1 epoch。
+#
+# 起点 v5 1k；必须 BAGEL_REASONING_TOKENS=1。
+
+vlm_llavaov_sft_3238006_bagel:
+  dataset_names:
+  - llavaov_sft_3238006_bagel
+  vit_image_transform_args:
+    image_stride: 14
+    max_image_size: 980
+    min_image_size: 378
+    max_pixels: 2_007_040
+  is_mandatory: false
+  num_used_data: # The sum should be larger that NUM_GPUS x NUM_WORKERS
+  - 6476
+  weight: 1.0
+
+
+depth_metric_taskonomy_refined:
+  dataset_names:
+  - taskonomy_refined
+  image_transform_args:
+    image_stride: 16
+    max_image_size: 1024
+    min_image_size: 512
+  depth_transform_args:
+    image_stride: 16
+    max_image_size: 1024
+    min_image_size: 512
+    depth_normalization:
+      type: 'multiscale_disparity_transform'
+      c: [2.0, 8.0, 32.0]
+  vit_image_transform_args:
+    image_stride: 14
+    max_image_size: 518
+    min_image_size: 224
+  is_mandatory: false
+  num_used_data: # The sum should be larger that NUM_GPUS x NUM_WORKERS
+  - 15377
+  weight: 1.0
+
+
+interleave_reasoning_v6_moge3_coco:
+  dataset_names:
+  - interleave_reasoning_v6_moge3_coco
+  image_transform_args:
+    image_stride: 16
+    max_image_size: 1024
+    min_image_size: 512
+  depth_transform_args:
+    image_stride: 16
+    max_image_size: 1024
+    min_image_size: 512
+    kitti_bm_crop: true
+    depth_normalization:
+      type: 'multiscale_disparity_transform'
+      c: [2.0, 8.0, 32.0]
+  vit_image_gen_transform_args:
+    image_stride: 14
+    max_image_size: 518
+    min_image_size: 224
+  vit_image_transform_args:
+    image_stride: 14
+    max_image_size: 980
+    min_image_size: 378
+    max_pixels: 2_007_040
+
+  is_mandatory: true
+  num_used_data: # The sum should be larger that NUM_GPUS x NUM_WORKERS
+  - 1400
+  weight: 2.0
+
+
+interleave_reasoning_v6_moge3_ade20k:
+  dataset_names:
+  - interleave_reasoning_v6_moge3_ade20k
+  image_transform_args:
+    image_stride: 16
+    max_image_size: 1024
+    min_image_size: 512
+  depth_transform_args:
+    image_stride: 16
+    max_image_size: 1024
+    min_image_size: 512
+    kitti_bm_crop: true
+    depth_normalization:
+      type: 'multiscale_disparity_transform'
+      c: [2.0, 8.0, 32.0]
+  vit_image_gen_transform_args:
+    image_stride: 14
+    max_image_size: 518
+    min_image_size: 224
+  vit_image_transform_args:
+    image_stride: 14
+    max_image_size: 980
+    min_image_size: 378
+    max_pixels: 2_007_040
+
+  is_mandatory: false
+  num_used_data: # The sum should be larger that NUM_GPUS x NUM_WORKERS
+  - 1220
+  weight: 2.0

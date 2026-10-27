@@ -1,0 +1,16 @@
+GeoUG
+Copyright 2026 ByteDance Ltd. and/or its affiliates.
+
+The GeoUG-authored portions of this repository are licensed under the Apache
+License 2.0. The repository also contains separately licensed components.
+Their copyright notices and license terms are listed in
+THIRD_PARTY_NOTICES.md and the licenses/ directory.
+
+This product includes a modified snapshot of VLMEvalKit:
+Copyright 2023 VLMEvalKit Authors.
+
+This product includes code derived from OpenGVLab InternVL:
+Copyright 2023 OpenGVLab.
+
+This product includes code derived from Facebook Research DiT:
+Copyright 2022 Facebook, Inc. and its affiliates.

@@ -11,15 +11,53 @@ The frozen v1.0 source contains:
 - exactly 400 A and 400 B answers;
 - one `closer` formulation per item.
 
-## Export
+## Download
 
-The internal source parquet stores absolute image paths and is not portable.
+The public release is available at
+[rayruiyang/3DCueBench](https://huggingface.co/datasets/rayruiyang/3DCueBench).
+Download **only the parquet**; it already contains the images, questions,
+answers, and analysis fields. No separate image directory or metadata files
+are required.
+
+Run from the GeoUG repository root:
+
+```python
+from huggingface_hub import hf_hub_download
+
+path = hf_hub_download(
+    repo_id="rayruiyang/3DCueBench",
+    repo_type="dataset",
+    filename="data/test-00000-of-00001.parquet",
+    revision="36ba0ed4fedc29e95acae9557b28f9aa201ca31c",
+    local_dir="artifacts/3dcuebench-v1.0.0",
+)
+print(path)
+```
+
+File size: **115,541,247 bytes** (110.2 MiB).
+
+```text
+SHA256: 5299fbcb85a9c0a2adf661bd89f7828b7fb332ac1c3951ba691379c78430e4b4
+```
+
+The Hugging Face split is `test`. The parquet's `split` column identifies the
+task (`depth` or `distance`), not a train/test partition. Provide only the
+image and question to the model; labels, reference distances, and diagnostic
+columns are for scoring and analysis.
+
+See the [Hugging Face data card](https://huggingface.co/datasets/rayruiyang/3DCueBench/blob/main/README.md)
+for the schema and image-loading examples.
+
+## Export from source (optional)
+
+Users of the published parquet can skip this step. The internal source
+parquet stores absolute image paths and is not portable.
 Convert it into the canonical release schema:
 
 ```bash
 python benchmarks/3dcuebench/export_release.py \
   --questions /path/to/benchmark_800/questions.parquet \
-  --output artifacts/3dcuebench-v1.0.0.parquet \
+  --output artifacts/3dcuebench-v1.0.0/data/test-00000-of-00001.parquet \
   --embed-images
 ```
 
@@ -36,7 +74,7 @@ scripts must materialize those paths.
 
 ```bash
 python benchmarks/3dcuebench/validate.py \
-  artifacts/3dcuebench-v1.0.0.parquet
+  artifacts/3dcuebench-v1.0.0/data/test-00000-of-00001.parquet
 ```
 
 Validation covers schema, counts, balance, points, answers, image decoding,
@@ -55,7 +93,7 @@ Score them with:
 
 ```bash
 python benchmarks/3dcuebench/evaluate.py \
-  --dataset artifacts/3dcuebench-v1.0.0.parquet \
+  --dataset artifacts/3dcuebench-v1.0.0/data/test-00000-of-00001.parquet \
   --predictions predictions.parquet \
   --output outputs/3dcuebench/metrics.json
 ```

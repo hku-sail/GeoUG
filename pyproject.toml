@@ -1,0 +1,53 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "geoug"
+version = "0.1.0"
+description = "Geometry generation and spatial understanding research code"
+readme = "README.md"
+requires-python = ">=3.10,<3.12"
+license = {text = "Mixed licensing; see THIRD_PARTY_NOTICES.md"}
+authors = [{name = "GeoUG Authors"}]
+keywords = ["multimodal", "spatial-reasoning", "depth-estimation"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+dynamic = ["dependencies"]
+
+[project.urls]
+Homepage = "https://yangr116.github.io/geoug-project-page/"
+
+[project.optional-dependencies]
+dev = [
+    "ml-collections",
+    "pytest>=8,<9",
+]
+
+[tool.setuptools]
+include-package-data = true
+license-files = [
+    "LICENSE",
+    "NOTICE",
+    "THIRD_PARTY_NOTICES.md",
+    "licenses/*.txt",
+]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["configs*", "data*", "evaluation*", "inference*", "modeling*", "train*"]
+
+[tool.setuptools.package-data]
+"*" = ["*.yaml", "*.json"]
+
+[tool.pytest.ini_options]
+testpaths = ["release_tests"]
+python_files = ["test_*.py"]
+
+
+[tool.setuptools.dynamic]
+dependencies = {file = ["requirements.txt"]}

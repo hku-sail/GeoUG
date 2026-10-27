@@ -1,0 +1,7 @@
+# VLMEvalKit is vendored at a fixed snapshot so GeoUG-specific adapters and
+# scoring remain reproducible. This editable install also installs its runtime
+# dependencies.
+# 69.5.1 retains pkg_resources.packaging, required by openai-clip.
+setuptools==69.5.1
+transformers==4.49.0
+-e ./third_party/VLMEvalKit

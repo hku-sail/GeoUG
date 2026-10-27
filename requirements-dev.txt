@@ -1,0 +1,5 @@
+ml-collections
+pytest>=8,<9
+PyYAML==6.0.2
+ruff>=0.8,<1
+validators

@@ -1,0 +1,27 @@
+{
+  "model": {
+    "GeoUG-local": {
+      "class": "BagelInference",
+      "model_config_path": "/path/to/checkpoint",
+      "model_param_path": "/path/to/checkpoint",
+      "reasoning_mode": "text",
+      "is_thinking": false,
+      "is_ema": true,
+      "max_new_tokns": 1024
+    }
+  },
+  "data": {
+    "3DCueBench_circular": {
+      "class": "SpatialDepth3DCircular",
+      "dataset": "3DCueBench_circular"
+    },
+    "CVBench3DTexutal_circular_bagel": {
+      "class": "CVBench3DTexutalCircular",
+      "dataset": "CVBench3DTexutal_circular_bagel"
+    },
+    "DA2KTextual_circular_bagel": {
+      "class": "PointTextualCircular",
+      "dataset": "DA2KTextual_circular_bagel"
+    }
+  }
+}
