@@ -2,9 +2,9 @@
 
 <p align="center">
   <a href="https://yangr116.github.io/geoug-project-page/"><img src="https://img.shields.io/badge/Project-Page-2563eb" alt="Project Page"></a>
-  <a href="https://yangr116.github.io/geoug-project-page/assets/geoug-paper.pdf"><img src="https://img.shields.io/badge/Paper-PDF-b31b1b" alt="Paper PDF"></a>
+  <a href="https://arxiv.org/pdf/2610.36022"><img src="https://img.shields.io/badge/arXiv-2610.36022-b31b1b" alt="arXiv paper"></a>
   <a href="#model-card"><img src="https://img.shields.io/badge/Model-Card-f2c94c" alt="Model Card"></a>
-  <a href="#data-card"><img src="https://img.shields.io/badge/Data-Card-22a699" alt="Data Card"></a>
+  <a href="https://huggingface.co/datasets/rayruiyang/3DCueBench"><img src="https://img.shields.io/badge/3DCueBench-22a699" alt="3DCueBench"></a>
 </p>
 
 <p align="center">
