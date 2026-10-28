@@ -1,4 +1,4 @@
-<h1 align="center">GeoUG: Learning and Reasoning with Geometry — How Generation Helps Spatial Understanding?</h1>
+<h1 align="center">GeoUG: Learning and Reasoning with Geometry — How Generation Helps Spatial Understanding</h1>
 
 <p align="center">
   <a href="https://yangr116.github.io/geoug-project-page/"><img src="https://img.shields.io/badge/Project-Page-2563eb" alt="Project Page"></a>
