@@ -49,8 +49,7 @@ float32 `.npy`.
 
 By default, depth inference loads `ckpt/geoug-metric-depth`, while spatial
 inference loads `ckpt/geoug-spatial-rl-lambda0.1`. Pass `--model-path` to
-override either checkpoint. See `ckpt/README.md` for download and upload
-layout.
+override either checkpoint. See the [model download links and local layout](../README.md#models).
 
 The transform defaults to `transform_config.yaml` inside the selected model
 directory, including when `--model-path` is overridden. Use

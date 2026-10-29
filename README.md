@@ -3,7 +3,7 @@
 <p align="center">
   <a href="https://yangr116.github.io/geoug-project-page/"><img src="https://img.shields.io/badge/Project-Page-2563eb" alt="Project Page"></a>
   <a href="https://arxiv.org/pdf/2610.36022"><img src="https://img.shields.io/badge/arXiv-2610.36022-b31b1b" alt="arXiv paper"></a>
-  <a href="#model-card"><img src="https://img.shields.io/badge/Model-Card-f2c94c" alt="Model Card"></a>
+  <a href="#models"><img src="https://img.shields.io/badge/Models-f2c94c" alt="Models"></a>
   <a href="https://huggingface.co/datasets/rayruiyang/3DCueBench"><img src="https://img.shields.io/badge/3DCueBench-22a699" alt="3DCueBench"></a>
 </p>
 
@@ -20,8 +20,8 @@
 <p align="center">
   <a href="#highlights">Highlights</a> ·
   <a href="#see-geoug-in-action">Demos</a> ·
-  <a href="#model-card">Models</a> ·
-  <a href="#data-card">Datasets</a> ·
+  <a href="#models">Models</a> ·
+  <a href="#datasets">Datasets</a> ·
   <a href="#main-results">Results</a> ·
   <a href="#installation">Installation</a> ·
   <a href="#inference">Inference</a> ·
@@ -37,12 +37,21 @@
   is useful, and uses generated geometry and measurement tools to confirm or
   revise its answer. The paper's RL policy skips depth generation on
   27.6–49.7% of questions across three reasoning benchmarks.
-- **Multi-scale Metric Depth Codec (MMDC).** Encode metric depth at 2 m, 8 m,
-  and 32 m pivots into the three channels of an RGB VAE.
+- **Multi-scale Metric Depth Codec (MMDC).** Encode metric depth using pivots of 2 m, 8 m,
+  and 32 m into a three-channel image, then encode it with an RGB VAE.
 - **3DCueBench.** 800 balanced depth and 3D-distance questions, with controlled
   shortcut agreement and four difficulty intervals.
 
 ## See GeoUG in action
+
+### Generate depth, measure in 3D, and revise the answer
+
+GeoUG can generate metric depth and use geometry tools to check its initial
+answer. The example below shows spatial reasoning on 3DCueBench.
+
+<img src="docs/assets/qual_d3_depth.png" alt="Grounded objects, generated metric depth, and a top-view point cloud on 3DCueBench" width="100%">
+
+Explore [answer corrections, direct answers, and failure cases](https://yangr116.github.io/geoug-project-page/#reasoning-cases).
 
 ### Image → metric depth
 
@@ -54,6 +63,9 @@ Generate depth in meters with MMDC.
 
 [▶ Watch demo](https://yangr116.github.io/geoug-project-page/assets/video/gen-depth.mp4)
 
+<details>
+<summary><b>More generation demos: novel views and first-person views</b></summary>
+
 ### Explore another viewpoint
 
 Geometric generation across views.
@@ -64,7 +76,7 @@ Geometric generation across views.
 
 [▶ Watch demo](https://yangr116.github.io/geoug-project-page/assets/video/gen-multiview.mp4)
 
-### See through another perspective
+### From third-person to first-person
 
 Third-person → first-person generation.
 
@@ -74,27 +86,13 @@ Third-person → first-person generation.
 
 [▶ Watch demo](https://yangr116.github.io/geoug-project-page/assets/video/gen-exo-ego.mp4)
 
+</details>
+
 These research demos use GeoUG task configurations; they do not imply that all
 capabilities are available in each released inference checkpoint. Video transitions
 are presentation effects, not denoising trajectories.
 
-<details>
-<summary><b>More evidence: spatial reasoning on 3DCueBench</b></summary>
-
-<img src="docs/assets/qual_d3_depth.png" alt="Grounded objects, generated metric depth, and a top-view point cloud on 3DCueBench" width="100%">
-
-Explore [answer corrections, direct answers, and failure cases](https://yangr116.github.io/geoug-project-page/#reasoning-cases).
-
-</details>
-
-## Release status
-
-**Available now:** GeoUG-Spatial, GeoUG-Depth, GeoUG-ColdStart, 3DCueBench,
-CV-Bench-3D Textual, and GeoUG Spatial RL training data. Download links are in
-the model and data cards below. DA-2K Textual / Visual can be reproduced locally.
-GeoUG cold start **data** is coming soon; the ColdStart **model** is already available.
-
-## Model Card
+## Models
 
 GeoUG provides an adaptive spatial reasoning model, a metric-depth model,
 and a cold-start checkpoint for RL training.
@@ -111,11 +109,7 @@ or pass `--model-path /path/to/model`. Each package contains model configs,
 tokenizer files, `transform_config.yaml`, `ae.safetensors`, `ema.safetensors`,
 and SHA256 checksums. Download the complete package from the model links above.
 
-**Download availability.** The three model packages are available on Hugging Face.
-See the [training data card](docs/TRAINING.md#training-data-card) for training-data availability.
-
-
-## Data Card
+## Datasets
 
 ### Evaluation datasets
 
@@ -134,24 +128,42 @@ ordinary/circular scoring protocol fixed when comparing models.
 
 ## Main results
 
-Circular accuracy requires both answer-option orders to be correct.
+**Spatial reasoning — circular accuracy (%) ↑.** Both answer-option orders
+must be correct. CV-Bench-3D and DA-2K use their Textual variants; 3DCueBench
+uses textual object coordinates.
 
-| Model | CV-Bench-3D | 3DCueBench | DA-2K | Average |
+| Model | CV-Bench-3D Textual | 3DCueBench | DA-2K Textual | Average |
 |---|---:|---:|---:|---:|
 | GeoUG (RL policy, λ=0.1) | **97.9** | **90.8** | **94.2** | **94.3** |
 
-These results are reported in the paper. Full adaptive-policy reproduction
-with the current evaluation code remains pending.
+**Depth estimation — affine-aligned evaluation.** GeoUG-Depth results use
+scale-and-shift alignment to ground truth. AbsRel is multiplied by 100
+(e.g., 3.32 means 0.0332); δ₁ is the percentage of pixels within a factor of
+1.25 of ground-truth depth. These scores measure depth shape after alignment,
+not absolute metric-scale accuracy.
 
-The standalone GeoUG-Depth model obtains affine-aligned AbsRel / δ1 of
-3.32 / 98.46 on NYU-v2, 4.84 / 97.27 on KITTI, and 3.75 / 97.85 on ETH3D.
+| Dataset | AbsRel ×100 ↓ | δ₁ (%) ↑ |
+|---|---:|---:|
+| NYU-v2 | 3.32 | 98.46 |
+| KITTI | 4.84 | 97.27 |
+| ETH3D | 3.75 | 97.85 |
+
+Results above are reported in the paper. See [evaluation scope](#evaluation-scope)
+for the current reproduction status.
+
 See the [Project Page](https://yangr116.github.io/geoug-project-page/) for the
 full tables, visualizations, and reasoning traces.
 
 ## Installation
 
-SFT, RL, and VLMEvalKit use separately tested dependency sets. Python 3.10 or
-3.11 is required.
+Use **Linux, a CUDA GPU, and Python 3.10 or 3.11**. FlashAttention requires a
+compatible CUDA build environment. SFT, RL, and VLMEvalKit use separate
+dependency sets.
+
+```bash
+git clone https://github.com/hku-sail/GeoUG.git
+cd GeoUG
+```
 
 ```bash
 # SFT, standalone inference, and depth evaluation
@@ -161,12 +173,9 @@ pip install -r requirements.txt
 pip install flash_attn==2.5.8 --no-build-isolation
 ```
 
-Run these commands from the `geoug` checkout. Its source is self-contained:
-the parent research workspace is not required. For use outside the checkout,
-also run `pip install -e . --no-deps` in this environment. Package installation
-and `requirements.txt` share the same dependency list. CUDA/FlashAttention
-must be installed separately as above. See the
-[standalone setup and checks](docs/STANDALONE.md).
+Run all commands from the repository root. To use GeoUG from other directories,
+also run `pip install -e . --no-deps` in the SFT environment. See the
+[setup guide](docs/STANDALONE.md) for environment details and installation checks.
 
 For the separate RL environment, see [training setup](docs/TRAINING.md#environment-setup).
 
@@ -181,13 +190,20 @@ pip install -r requirements-eval.txt
 ## Inference
 
 The commands below use the default local model directories listed in the
-[Model Card](#model-card). Pass `--model-path` to use a different location.
+[Models](#models) section. Pass `--model-path` to use a different location.
+
+After downloading the model packages, run these examples with the bundled
+[example image](docs/assets/example-scene.png), also used on the project page.
+Point coordinates are normalized to 0–1000 along each image axis. In this
+image, point A (400, 650) is on the foreground keyboard and point B (800, 350)
+is on the folding chair to the right. These commands demonstrate inference;
+they are not benchmark evaluation cases.
 
 Generate metric depth:
 
 ```bash
 python -m inference.depth \
-  --image /path/to/image.jpg \
+  --image docs/assets/example-scene.png \
   --output-dir outputs/depth
 ```
 
@@ -195,15 +211,24 @@ Run adaptive spatial reasoning:
 
 ```bash
 python -m inference.spatial \
-  --image /path/to/image.jpg \
-  --question 'Which object is closer to the camera?'
+  --image docs/assets/example-scene.png \
+  --question 'Which point is closer to the camera, <point>400 650</point> A or <point>800 350</point> B?'
 ```
 
-Use `--mode force_depth` or `--mode force_answer` to inspect the two policy
-endpoints. See `inference/README.md` for intrinsic-matrix input and output
-formats.
+Use `--mode force_depth` or `--mode force_answer` to override the branch at the
+model's `<DECIDE>` marker. If the model answers before that marker, the override
+is not applied. See the [inference guide](inference/README.md) for output fields,
+camera intrinsics, and output formats.
 
 ## Evaluation
+
+### Evaluation scope
+
+Standalone adaptive spatial inference is available through `inference.spatial`.
+The VLMEvalKit commands below evaluate registered open-source VLMs and BAGEL
+base; they are not an end-to-end reproduction command for GeoUG's adaptive RL
+policy. Full reproduction of the paper's adaptive-policy results with the
+current evaluation code remains pending.
 
 ### Open-source VLMs and BAGEL base
 
@@ -225,7 +250,7 @@ bash evaluation/vlmevalkit/run_spatial_suite.sh
 
 Set `COORD_STYLE` for non-Qwen2.5 models. The launcher reports circular
 accuracy for 3DCueBench, CV-Bench-3D Textual, and DA-2K Textual. See
-`evaluation/vlmevalkit/README.md`. The paper suite uses deterministic exact
+[the evaluation guide](evaluation/vlmevalkit/README.md). The paper suite uses deterministic exact
 matching by default; set `JUDGE` only when intentionally testing another
 answer extractor.
 
@@ -240,7 +265,7 @@ bash scripts/eval_depth.sh \
 ```
 
 The evaluator reports metric, scale-invariant, affine-invariant, and
-disparity-aligned depth metrics. Details are in `evaluation/depth/README.md`.
+disparity-aligned depth metrics. See the [depth evaluation guide](evaluation/depth/README.md).
 
 ### 3DCueBench
 
@@ -266,7 +291,8 @@ parquet. No separate image directory or metadata download is required. See the
 
 ## Training
 
-See [Training data card and recipes](docs/TRAINING.md) for data downloads,
+See the [training data card](docs/TRAINING.md#training-data-card) for dataset
+downloads and availability, and the [training guide](docs/TRAINING.md) for
 environment setup, and SFT / RL training instructions.
 
 ## Repository layout
@@ -282,7 +308,7 @@ evaluation/depth/        Metric-depth evaluation
 evaluation/vlmevalkit/   Open-model and circular spatial evaluation
 benchmarks/3dcuebench/   3DCueBench export, validation, and scoring
 third_party/VLMEvalKit/  Fixed evaluation snapshot with GeoUG adapters
-ckpt/                    Model download guide (local packages are ignored)
+ckpt/                    Local model packages (create after download; ignored by Git)
 scripts/                 Public launchers
 ```
 

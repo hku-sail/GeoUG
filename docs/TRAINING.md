@@ -14,7 +14,7 @@ cold-start checkpoint.
 
 | Dataset / artifact | Stage | Download | Notes / contents |
 |---|---|---|---|
-| **GeoUG cold start data** | SFT | [Coming soon][data-cold-start] | COCO- and ADE20K-derived interleaved spatial reasoning samples. [Manifest format](../configs/sft/datasets.example.json). |
+| **GeoUG cold start data** | SFT | Coming soon | COCO- and ADE20K-derived interleaved spatial reasoning samples. [Manifest format](../configs/sft/datasets.example.json). |
 | **GeoUG Spatial RL data** | RL | [Hugging Face][data-rl] | `train_geoug_rl.parquet`: 800 training samples with images, camera metadata, and losslessly embedded generated-depth caches. Unpack before training; prepare validation/evaluation data separately. [RL guide](RL_TRAINING.md). |
 
 The links above distinguish downloadable releases from local preparation steps.
@@ -157,6 +157,5 @@ The final method is `spatial_gate_draft_v3`: draft tokens receive zero
 advantage, grounding uses depth-branch credit, and the gate uses a forced
 two-branch counterfactual estimate. See the [detailed RL guide](RL_TRAINING.md).
 
-[data-cold-start]: ../README.md#release-status
 [data-rl]: https://huggingface.co/datasets/rayruiyang/GeoUG_data
 [model-sft-init]: https://huggingface.co/rayruiyang/GeoUG-ColdStart

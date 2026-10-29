@@ -4,8 +4,8 @@ The `geoug` directory is the repository root. Copy or clone it into any director
 no parent workspace, private Python package, or external source symlink is needed.
 Use Linux, Python 3.10 or 3.11, and a CUDA GPU for model inference/training.
 Model weights and datasets remain separate artifacts, supplied through explicit
-local paths. Their public upload status is tracked in the
-[README](../README.md#release-status).
+local paths. See the README for [models](../README.md#models) and
+[datasets](../README.md#datasets).
 
 ## Inference and SFT environment
 
