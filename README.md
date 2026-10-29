@@ -39,7 +39,7 @@
   27.6–49.7% of questions across three reasoning benchmarks.
 - **Multi-scale Metric Depth Codec (MMDC).** Encode metric depth using pivots of 2 m, 8 m,
   and 32 m into a three-channel image, then encode it with an RGB VAE.
-- **3DCueBench.** 800 balanced depth and 3D-distance questions, with controlled
+- **[3DCueBench](#3dcuebench).** 800 balanced depth and 3D-distance questions, with controlled
   shortcut agreement and four difficulty intervals.
 
 ## See GeoUG in action
@@ -269,6 +269,16 @@ disparity-aligned depth metrics. See the [depth evaluation guide](evaluation/dep
 
 ### 3DCueBench
 
+- **Tasks:** camera-depth ordering and 3D-distance ordering relative to an anchor.
+- **Scale:** 800 questions on 757 images; 400 per task, with balanced A/B answers.
+- **Cue control:** 50% cue-consistent and 50% cue-conflicting questions for selected 2D rules.
+- **Difficulty:** four relative-gap intervals, 100 questions per task per interval; smaller gaps are harder.
+
+<img src="docs/assets/3dcuebench-overview.png" alt="3DCueBench overview: depth and distance examples where 2D cues contradict 3D geometry, balanced cue groups, and model accuracy by cue group" width="100%">
+
+*2D shortcuts vs. 3D geometry. BEV: bird's-eye view. Panel (d): ordinary accuracy.*
+
+**Download and evaluate.**
 Download the [released parquet][data-3dcuebench], then validate it:
 
 ```bash
@@ -285,9 +295,8 @@ python benchmarks/3dcuebench/evaluate.py \
   --output outputs/3dcuebench/metrics.json
 ```
 
-The published release contains 800 questions on 757 images in one image-embedded
-parquet. No separate image directory or metadata download is required. See the
-[download and evaluation guide](benchmarks/3dcuebench/README.md).
+- **Scoring:** the command reports ordinary accuracy; [main results](#main-results) use circular accuracy (both option orders correct).
+- **Data:** one parquet with embedded images. [Download and scoring details](benchmarks/3dcuebench/README.md) · [Circular evaluation](evaluation/vlmevalkit/README.md).
 
 ## Training
 
@@ -310,6 +319,23 @@ benchmarks/3dcuebench/   3DCueBench export, validation, and scoring
 third_party/VLMEvalKit/  Fixed evaluation snapshot with GeoUG adapters
 ckpt/                    Local model packages (create after download; ignored by Git)
 scripts/                 Public launchers
+```
+
+## Citation
+
+If you find GeoUG or 3DCueBench useful in your research, please cite our
+[paper](https://arxiv.org/abs/2610.36022). Thank you for your support!
+
+```bibtex
+@misc{yang2026learningreasoninggeometry,
+  title={Learning and Reasoning with Geometry: How Generation Helps Spatial Understanding},
+  author={Rui Yang and Yanwei Li and Sili Chen and Jingjia Huang and Yi Lin and Hengshuang Zhao},
+  year={2026},
+  eprint={2610.36022},
+  archivePrefix={arXiv},
+  primaryClass={cs.CV},
+  url={https://arxiv.org/abs/2610.36022}
+}
 ```
 
 <!-- Published repositories and local reproduction guides. -->
